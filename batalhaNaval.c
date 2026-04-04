@@ -1,10 +1,12 @@
 #include <stdio.h>
-
+#define LINHA 10
+#define COLUNA 10
+#define TAMANHO_BARCO 3
 // Desafio Batalha Naval - MateCheck
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
-void escreveTabuleiro(int tab[10][10]){
+void escreveTabuleiro(int tab[LINHA][COLUNA]){
     printf(" \t");
 
     for(char letra = 'A'; letra <= 'J'; letra++){
@@ -22,7 +24,7 @@ void escreveTabuleiro(int tab[10][10]){
     }
 }
 
-void preencheTabuleiro(int tab[10][10]){
+void preencheTabuleiro(int tab[LINHA][COLUNA]){
     for(int i = 0; i < 10; i++){
         for(int j = 0; j < 10; j++){
             tab[i][j] = 0;
@@ -31,8 +33,8 @@ void preencheTabuleiro(int tab[10][10]){
 }
 
 int main() {
-    int tabuleiro[10][10];
-    int navio1[3] = {3,3,3}, navio2[3] = {3,3,3};    
+    int tabuleiro[LINHA][COLUNA];
+    int navio1[TAMANHO_BARCO] = {3,3,3}, navio2[TAMANHO_BARCO] = {3,3,3}, navio3[TAMANHO_BARCO] = {3,3,3}, navio4[TAMANHO_BARCO] = {3,3,3};    
 
     // Nível Novato - Posicionamento dos Navios
     // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
@@ -57,6 +59,22 @@ int main() {
     for(int i = 7, j = 0; j < 3; j++, i++){
         //A variável i = 7 indica o início da posição do barco
         tabuleiro[i][8] = navio2[j];
+    }
+
+    escreveTabuleiro(tabuleiro);
+
+    printf("\nPosicionando o navio 3\n\n");
+
+    for(int i = 4; i < 7; i++){
+        tabuleiro[i][i] = 3;
+    }
+
+    escreveTabuleiro(tabuleiro);
+
+    printf("\nPosicionando o navio 4\n\n");
+
+    for(int i = 0; i < 3; i++){
+        tabuleiro[i][LINHA - 1 - i] = 3;
     }
 
     escreveTabuleiro(tabuleiro);
