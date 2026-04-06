@@ -1,6 +1,8 @@
 #include <stdio.h>
 #define TAMANHO_TAB 10 //Tamanho do taabuleiro
 #define TAMANHO_NAV 3 //Tamanho do navio
+#define LINHA_HAB 3
+#define COLUNA_HAB 5
 
 /*Caso se queira alterar o tamanho do tabuleiro ou do navio, basta apenas mudar o valor 
 das constantes, e todo o resto do código se adaptará autoamticamente aos novos valores*/
@@ -71,15 +73,57 @@ void preencheNavio(int nav[TAMANHO_NAV]){
     
 }
 
+void preencheHabilidade(int hab[LINHA_HAB][COLUNA_HAB], int tipo){
+    for(int i = 0; i < LINHA_HAB; i ++){
+        for (int j  = 0; j < COLUNA_HAB; j++){
+            hab[i][j] = 0;    
+        }
+    }
+
+    int meioLinha = 1;
+    int meioColuna = 2;
+    int dist;
+
+    for(int i = 0; i < LINHA_HAB; i ++){
+        for (int j  = 0; j < COLUNA_HAB; j++){
+            switch (tipo){
+            case 1:
+                if(j >= meioColuna - i && j <= meioColuna+i){
+                    hab[i][j] = 1;
+                }
+                break;
+            case 2:
+                if(i == meioLinha || j == meioColuna){
+                    hab[i][j] = 1;
+                }
+                break;
+            case 3:
+                dist = abs(i - meioLinha)+abs(j-meioColuna);
+                if(dist <= 1){
+                    hab[i][j] = 1;
+                }
+                break;
+            default:
+                break;
+            }   
+        }
+    }
+}
+
 int main() {
     int tabuleiro[TAMANHO_TAB][TAMANHO_TAB];
-    int navio[TAMANHO_NAV];    
+    int navio[TAMANHO_NAV];
+    int habilidade1[LINHA_HAB][COLUNA_HAB], habilidade2[LINHA_HAB][COLUNA_HAB], habilidade3[LINHA_HAB][COLUNA_HAB];
 
     printf("-----JOGO BATALHA NAVAL-----\n\n");
 
     preencheTabuleiro(tabuleiro); //Preenche toda a matriz com o valor 0
     preencheNavio(navio);//Preenche o navio com a posição 3
-    
+    preencheHabilidade(habilidade1,1);
+    preencheHabilidade(habilidade2,2);
+    preencheHabilidade(habilidade3,3);
+
+
     printf("\nPosicionando o navio 1\n\n");
     posicionaNavio(tabuleiro,navio,1,2,0);
 
@@ -87,12 +131,10 @@ int main() {
     posicionaNavio(tabuleiro,navio,2,7,8);
     
     printf("\nPosicionando o navio 3\n\n");
-    posicionaNavio(tabuleiro,navio,3,4,NULL);
+    posicionaNavio(tabuleiro,navio,3,4,0);
 
     printf("\nPosicionando o navio 4\n\n");
-    posicionaNavio(tabuleiro,navio,4,0,NULL);
-
-
+    posicionaNavio(tabuleiro,navio,4,0,0);
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
     // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
