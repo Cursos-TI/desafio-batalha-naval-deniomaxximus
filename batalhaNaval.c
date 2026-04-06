@@ -1,8 +1,8 @@
 #include <stdio.h>
 #define TAMANHO_TAB 10 //Tamanho do taabuleiro
 #define TAMANHO_NAV 3 //Tamanho do navio
-#define LINHA_HAB 3
-#define COLUNA_HAB 5
+#define LINHA_HAB 3 //Linhas da habilidade
+#define COLUNA_HAB 5 //Colunas da habilidade
 
 /*Caso se queira alterar o tamanho do tabuleiro ou do navio, basta apenas mudar o valor 
 das constantes, e todo o resto do código se adaptará autoamticamente aos novos valores*/
@@ -73,16 +73,37 @@ void preencheNavio(int nav[TAMANHO_NAV]){
     
 }
 
-void preencheHabilidade(int hab[LINHA_HAB][COLUNA_HAB], int tipo){
-    for(int i = 0; i < LINHA_HAB; i ++){
-        for (int j  = 0; j < COLUNA_HAB; j++){
-            hab[i][j] = 0;    
+void posicionaHabilidade(int tab[TAMANHO_TAB][TAMANHO_TAB], int hab[LINHA_HAB][COLUNA_HAB], int linhaInicio, int colunaInicio){
+    for(int i = 0; i < LINHA_HAB; i++){
+        for(int j = 0; j < COLUNA_HAB; j++){
+
+            if(hab[i][j] == 1){
+                int linha = linhaInicio+i;
+                int coluna = colunaInicio+j;
+
+                if(linha >= 0 && linha < TAMANHO_TAB && coluna >= 0 && coluna < TAMANHO_TAB){
+                    tab[linha][coluna] = hab[i][j];
+                }
+            }
+            
         }
     }
 
-    int meioLinha = 1;
-    int meioColuna = 2;
-    int dist;
+    escreveTabuleiro(tab);
+}
+
+void preencheHabilidade(int hab[LINHA_HAB][COLUNA_HAB], int tipo){
+    printf("\n");
+
+    for(int i = 0; i < LINHA_HAB; i ++){
+        for (int j  = 0; j < COLUNA_HAB; j++){
+            hab[i][j] = 0; //Preenche toda a matriz com o valor 0
+        }
+    }
+
+    int meioLinha = 1; //Linha do meio
+    int meioColuna = 2; //Coluna do meio
+    int dist; //Distância até o meio da matriz
 
     for(int i = 0; i < LINHA_HAB; i ++){
         for (int j  = 0; j < COLUNA_HAB; j++){
@@ -90,22 +111,25 @@ void preencheHabilidade(int hab[LINHA_HAB][COLUNA_HAB], int tipo){
             case 1:
                 if(j >= meioColuna - i && j <= meioColuna+i){
                     hab[i][j] = 1;
+                    /*A medida que i (linha) aumentar, aumentará a distância o intervalo da base do 
+                    triângulo, tendo como centro a coluna do meio. Se a posição (i,j) estiver dentro do 
+                    intervalo da distância da base, receberá 1*/
                 }
                 break;
             case 2:
                 if(i == meioLinha || j == meioColuna){
                     hab[i][j] = 1;
+                    /*Se a posição (i,j) estiver na linha do meio ou na coluna do meio, receberá 1*/
                 }
                 break;
             case 3:
                 dist = abs(i - meioLinha)+abs(j-meioColuna);
                 if(dist <= 1){
                     hab[i][j] = 1;
+                    /*Se a distância da posição (i,j) até o centro for menor ou igual a 1, receberá 1*/
                 }
                 break;
-            default:
-                break;
-            }   
+            }
         }
     }
 }
@@ -135,6 +159,16 @@ int main() {
 
     printf("\nPosicionando o navio 4\n\n");
     posicionaNavio(tabuleiro,navio,4,0,0);
+
+    printf("\n Posicionando Habilidade 1: Triângulo\n\n");
+    posicionaHabilidade(tabuleiro,habilidade1,0,1);
+
+    printf("\nPosicionando Habilidade 2: Cruz\n\n");
+    posicionaHabilidade(tabuleiro,habilidade2,4,3);
+
+    printf("\nPosiciona Habilidade 3: Octaedro\n\n");
+    posicionaHabilidade(tabuleiro,habilidade3,7,6);
+
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
     // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
